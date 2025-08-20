@@ -1,5 +1,11 @@
-import { Navigation } from "@/components/navigation"
-import { UserDashboard } from "@/components/user-dashboard"
+import { Navigation } from "@/components/navigation";
+import { UserDashboard } from "@/components/user-dashboard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Dashboard",
+  description: "Manage and monitor your activities",
+};
 
 export default function DashboardPage() {
   return (
@@ -9,5 +15,5 @@ export default function DashboardPage() {
         <UserDashboard />
       </main>
     </div>
-  )
+  );
 }
