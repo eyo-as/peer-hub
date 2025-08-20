@@ -1,9 +1,15 @@
-import { Navigation } from "@/components/navigation"
-import { QuestionsList } from "@/components/questions-list"
-import { QuestionFilters } from "@/components/question-filters"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import Link from "next/link"
+import { Navigation } from "@/components/navigation";
+import { QuestionsList } from "@/components/questions-list";
+import { QuestionFilters } from "@/components/question-filters";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Questions",
+  description: "Browse and search through community questions",
+};
 
 export default function QuestionsPage() {
   return (
@@ -13,8 +19,12 @@ export default function QuestionsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2 font-serif">Questions</h1>
-            <p className="text-muted-foreground">Browse and search through community questions</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2 font-serif">
+              Questions
+            </h1>
+            <p className="text-muted-foreground">
+              Browse and search through community questions
+            </p>
           </div>
           <Button asChild>
             <Link href="/questions/ask">
@@ -37,5 +47,5 @@ export default function QuestionsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

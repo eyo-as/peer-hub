@@ -1,11 +1,17 @@
-import { Navigation } from "@/components/navigation"
-import { QuestionDetail } from "@/components/question-detail"
+import { Navigation } from "@/components/navigation";
+import { QuestionDetail } from "@/components/question-detail";
+import { Metadata } from "next";
 
 interface QuestionPageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
+
+export const metadata: Metadata = {
+  title: "Question detail",
+  description: "Get more detail about the question",
+};
 
 export default function QuestionPage({ params }: QuestionPageProps) {
   return (
@@ -15,5 +21,5 @@ export default function QuestionPage({ params }: QuestionPageProps) {
         <QuestionDetail questionId={params.id} />
       </main>
     </div>
-  )
+  );
 }
