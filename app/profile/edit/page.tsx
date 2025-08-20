@@ -1,5 +1,11 @@
-import { Navigation } from "@/components/navigation"
-import { EditProfile } from "@/components/edit-profile"
+import { Navigation } from "@/components/navigation";
+import { EditProfile } from "@/components/edit-profile";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Profile",
+  description: "Update your profile information and preferences",
+};
 
 export default function EditProfilePage() {
   return (
@@ -9,5 +15,5 @@ export default function EditProfilePage() {
         <EditProfile />
       </main>
     </div>
-  )
+  );
 }

@@ -1,11 +1,17 @@
-import { Navigation } from "@/components/navigation"
-import { UserProfile } from "@/components/user-profile"
+import { Navigation } from "@/components/navigation";
+import { UserProfile } from "@/components/user-profile";
+import { Metadata } from "next";
 
 interface ProfilePageProps {
   params: {
-    userId: string
-  }
+    userId: string;
+  };
 }
+
+export const metadata: Metadata = {
+  title: "Profile",
+  description: "Review your account",
+};
 
 export default function ProfilePage({ params }: ProfilePageProps) {
   return (
@@ -15,5 +21,5 @@ export default function ProfilePage({ params }: ProfilePageProps) {
         <UserProfile userId={params.userId} />
       </main>
     </div>
-  )
+  );
 }
