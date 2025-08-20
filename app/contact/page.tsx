@@ -1,10 +1,16 @@
-import { Navigation } from "@/components/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Mail, MessageSquare, Phone } from "lucide-react"
+import { Navigation } from "@/components/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Mail, MessageSquare, Phone } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in Touch",
+};
 
 export default function ContactPage() {
   return (
@@ -18,7 +24,7 @@ export default function ContactPage() {
               Contact <span className="text-accent">Us</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Have questions or feedback? We'd love to hear from you.
+              Have questions or feedback? We&apos;d love to hear from you.
             </p>
           </div>
         </section>
@@ -30,13 +36,18 @@ export default function ContactPage() {
               {/* Contact Form */}
               <Card className="border-border">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-serif">Send us a message</CardTitle>
+                  <CardTitle className="text-2xl font-serif">
+                    Send us a message
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="Enter your first name" />
+                      <Input
+                        id="firstName"
+                        placeholder="Enter your first name"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name</Label>
@@ -46,7 +57,11 @@ export default function ContactPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="Enter your email" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -70,10 +85,13 @@ export default function ContactPage() {
               {/* Contact Info */}
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground mb-6 font-serif">Get in Touch</h2>
+                  <h2 className="text-3xl font-bold text-foreground mb-6 font-serif">
+                    Get in Touch
+                  </h2>
                   <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                    Whether you're a student, teacher, or administrator interested in Peer-Hub, we're here to help
-                    answer your questions and support your educational journey.
+                    Whether you&apos;re a student, teacher, or administrator
+                    interested in Peer-Hub, we&apos;re here to help answer your
+                    questions and support your educational journey.
                   </p>
                 </div>
 
@@ -85,9 +103,15 @@ export default function ContactPage() {
                           <Mail className="h-5 w-5 text-accent" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-foreground mb-1">Email Support</h3>
-                          <p className="text-muted-foreground">support@peer-hub.edu</p>
-                          <p className="text-sm text-muted-foreground">We typically respond within 24 hours</p>
+                          <h3 className="font-semibold text-foreground mb-1">
+                            Email Support
+                          </h3>
+                          <p className="text-muted-foreground">
+                            support@peer-hub.edu
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            We typically respond within 24 hours
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -100,9 +124,15 @@ export default function ContactPage() {
                           <MessageSquare className="h-5 w-5 text-accent" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-foreground mb-1">Community Support</h3>
-                          <p className="text-muted-foreground">Ask questions in our platform</p>
-                          <p className="text-sm text-muted-foreground">Get help from our community</p>
+                          <h3 className="font-semibold text-foreground mb-1">
+                            Community Support
+                          </h3>
+                          <p className="text-muted-foreground">
+                            Ask questions in our platform
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Get help from our community
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -115,9 +145,15 @@ export default function ContactPage() {
                           <Phone className="h-5 w-5 text-accent" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-foreground mb-1">Phone Support</h3>
-                          <p className="text-muted-foreground">1-800-PEER-HUB</p>
-                          <p className="text-sm text-muted-foreground">Mon-Fri, 9AM-5PM EST</p>
+                          <h3 className="font-semibold text-foreground mb-1">
+                            Phone Support
+                          </h3>
+                          <p className="text-muted-foreground">
+                            1-800-PEER-HUB
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Mon-Fri, 9AM-5PM EST
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -125,24 +161,35 @@ export default function ContactPage() {
                 </div>
 
                 <div className="pt-8">
-                  <h3 className="text-xl font-semibold text-foreground mb-4 font-serif">Frequently Asked Questions</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-4 font-serif">
+                    Frequently Asked Questions
+                  </h3>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium text-foreground">How do I create an account?</h4>
+                      <h4 className="font-medium text-foreground">
+                        How do I create an account?
+                      </h4>
                       <p className="text-sm text-muted-foreground">
-                        Click "Sign Up" and choose whether you're a student or teacher.
+                        Click Sign Up and choose whether you&apos;re a student
+                        or teacher.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-foreground">Is Peer-Hub free to use?</h4>
+                      <h4 className="font-medium text-foreground">
+                        Is Peer-Hub free to use?
+                      </h4>
                       <p className="text-sm text-muted-foreground">
-                        Yes! Peer-Hub is completely free for all students and teachers.
+                        Yes! Peer-Hub is completely free for all students and
+                        teachers.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-foreground">How do I report inappropriate content?</h4>
+                      <h4 className="font-medium text-foreground">
+                        How do I report inappropriate content?
+                      </h4>
                       <p className="text-sm text-muted-foreground">
-                        Use the report button on any question or answer, and our moderators will review it.
+                        Use the report button on any question or answer, and our
+                        moderators will review it.
                       </p>
                     </div>
                   </div>
@@ -153,5 +200,5 @@ export default function ContactPage() {
         </section>
       </main>
     </div>
-  )
+  );
 }
