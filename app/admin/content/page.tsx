@@ -1,5 +1,11 @@
-import { Navigation } from "@/components/navigation"
-import { ContentModeration } from "@/components/content-moderation"
+import { Navigation } from "@/components/navigation";
+import { ContentModeration } from "@/components/content-moderation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Content Moderation",
+  description: "Review and moderate reported content",
+};
 
 export default function AdminContentPage() {
   return (
@@ -9,5 +15,5 @@ export default function AdminContentPage() {
         <ContentModeration />
       </main>
     </div>
-  )
+  );
 }

@@ -1,5 +1,11 @@
-import { Navigation } from "@/components/navigation"
-import { AdminDashboard } from "@/components/admin-dashboard"
+import { Navigation } from "@/components/navigation";
+import { AdminDashboard } from "@/components/admin-dashboard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  description: "Manage and monitor the Peer-Hub platform",
+};
 
 export default function AdminPage() {
   return (
@@ -9,5 +15,5 @@ export default function AdminPage() {
         <AdminDashboard />
       </main>
     </div>
-  )
+  );
 }

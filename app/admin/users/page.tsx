@@ -1,5 +1,11 @@
-import { Navigation } from "@/components/navigation"
-import { UserManagement } from "@/components/user-management"
+import { Navigation } from "@/components/navigation";
+import { UserManagement } from "@/components/user-management";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Management",
+  description: "Manage user accounts and permissions",
+};
 
 export default function AdminUsersPage() {
   return (
@@ -9,5 +15,5 @@ export default function AdminUsersPage() {
         <UserManagement />
       </main>
     </div>
-  )
+  );
 }
