@@ -1,7 +1,19 @@
-import Link from "next/link"
-import { SignUpForm } from "@/components/signup-form"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen } from "lucide-react"
+import Link from "next/link";
+import { SignUpForm } from "@/components/signup-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { BookOpen } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description: "Create a new account here",
+};
 
 export default function SignUpPage() {
   return (
@@ -15,15 +27,21 @@ export default function SignUpPage() {
             </div>
             <span className="text-2xl font-bold text-foreground">Peer-Hub</span>
           </Link>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Join the community</h1>
-          <p className="text-muted-foreground">Create your account to start collaborating and learning</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Join the community
+          </h1>
+          <p className="text-muted-foreground">
+            Create your account to start collaborating and learning
+          </p>
         </div>
 
         {/* Sign Up Card */}
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-xl">Create account</CardTitle>
-            <CardDescription>Enter your information to create your Peer-Hub account</CardDescription>
+            <CardDescription>
+              Enter your information to create your Peer-Hub account
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <SignUpForm />
@@ -34,12 +52,15 @@ export default function SignUpPage() {
         <div className="text-center mt-6">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/auth/signin" className="text-accent hover:underline font-medium">
+            <Link
+              href="/auth/signin"
+              className="text-accent hover:underline font-medium"
+            >
               Sign in here
             </Link>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
