@@ -1,31 +1,9 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { MessageSquare, Users, Trophy, BookOpen, ArrowRight, Sparkles } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { features } from "@/config/hero-section";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 export function HeroSection() {
-  const features = [
-    {
-      icon: MessageSquare,
-      title: "Ask & Answer",
-      description: "Get help from peers and teachers on any academic topic",
-    },
-    {
-      icon: Users,
-      title: "Collaborate",
-      description: "Connect with classmates and build a learning community",
-    },
-    {
-      icon: Trophy,
-      title: "Vote & Rank",
-      description: "Help identify the most helpful answers through voting",
-    },
-    {
-      icon: BookOpen,
-      title: "Organize",
-      description: "Find content easily with our tagging and search system",
-    },
-  ]
-
   return (
     <section className="relative py-24 px-4 bg-gradient-to-br from-background via-muted/30 to-accent/5 overflow-hidden">
       {/* Background decoration */}
@@ -44,14 +22,15 @@ export function HeroSection() {
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8 font-serif leading-tight">
             Learn Together,
             <br />
-            <span className="text-accent bg-gradient-to-r from-accent to-accent/70 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-accent to-accent/70 bg-clip-text text-transparent">
               Grow Together
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-            The collaborative platform where high school students and teachers connect to share knowledge, ask
-            questions, and build a supportive learning community that drives academic excellence.
+            The collaborative platform where high school students and teachers
+            connect to share knowledge, ask questions, and build a supportive
+            learning community that drives academic excellence.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -74,25 +53,31 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-center text-center">
             <div>
               <div className="text-3xl font-bold text-foreground">10K+</div>
-              <div className="text-sm text-muted-foreground">Active Students</div>
+              <div className="text-sm text-muted-foreground">
+                Active Students
+              </div>
             </div>
             <div className="hidden sm:block w-px h-12 bg-border"></div>
             <div>
               <div className="text-3xl font-bold text-foreground">500+</div>
-              <div className="text-sm text-muted-foreground">Expert Teachers</div>
+              <div className="text-sm text-muted-foreground">
+                Expert Teachers
+              </div>
             </div>
             <div className="hidden sm:block w-px h-12 bg-border"></div>
             <div>
               <div className="text-3xl font-bold text-foreground">25K+</div>
-              <div className="text-sm text-muted-foreground">Questions Answered</div>
+              <div className="text-sm text-muted-foreground">
+                Questions Answered
+              </div>
             </div>
           </div>
         </div>
 
         {/* Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => {
-            const Icon = feature.icon
+          {features?.map((feature, index) => {
+            const Icon = feature.icon;
             return (
               <Card
                 key={index}
@@ -104,14 +89,18 @@ export function HeroSection() {
                       <Icon className="h-8 w-8 text-accent" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3 font-serif">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                  <h3 className="text-xl font-semibold text-foreground mb-3 font-serif">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
                 </CardContent>
               </Card>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }
