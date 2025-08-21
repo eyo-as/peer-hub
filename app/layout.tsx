@@ -1,22 +1,22 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import { Manrope } from "next/font/google";
+// import { Geist } from "next/font/google";
+// import { Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Footer from "@/components/footer";
 
-const geist = Geist({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-geist",
-});
+// const geist = Geist({
+//   subsets: ["latin"],
+//   display: "swap",
+//   variable: "--font-geist",
+// });
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-manrope",
-});
+// const manrope = Manrope({
+//   subsets: ["latin"],
+//   display: "swap",
+//   variable: "--font-manrope",
+// });
 
 export const metadata: Metadata = {
   title: "Peer-Hub - Student Collaboration Platform",
@@ -31,11 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geist.variable} ${manrope.variable} antialiased`}
-      suppressHydrationWarning
-    >
+    // className={`${geist.variable} ${manrope.variable} antialiased`}
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans">
         <ThemeProvider
           attribute="class"
