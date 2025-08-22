@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,22 +14,35 @@ export function SignInForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
+    setMessage(null);
 
     try {
       const data = await loginUser(email, password);
 
-      localStorage.setItem("token", data.token);
-      setSuccess(data.message);
+      // backend returns message on success
+      if (data.message) {
+        localStorage.setItem("token", data.token);
+        setMessage({ type: "success", text: data.message });
+      }
+
+      if (data.error) {
+        setMessage({ type: "error", text: data.error });
+      }
     } catch (err: unknown) {
-      setError("Login failed");
-      console.log(err);
+      // backend returns error on failure
+      if (err instanceof Error) {
+        setMessage({ type: "error", text: err.message });
+      } else {
+        setMessage({ type: "error", text: "Unexpected error occurred" });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -38,15 +50,14 @@ export function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {success && (
-        <Alert variant="default">
-          <AlertDescription className="text-green-500">
-            {success}
+      {message && (
+        <Alert variant={message.type === "success" ? "default" : "destructive"}>
+          <AlertDescription
+            className={
+              message.type === "success" ? "text-green-600" : "text-red-600"
+            }
+          >
+            {message.text}
           </AlertDescription>
         </Alert>
       )}
@@ -79,7 +90,7 @@ export function SignInForm() {
             disabled={isLoading}
           />
           <Button
-            type="submit"
+            type="button"
             variant="ghost"
             size="sm"
             className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
