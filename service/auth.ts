@@ -1,27 +1,14 @@
-import request from "./api";
+import { apiFetch } from "./api";
 
-interface register {
-  username: string;
-  first_name: string;
-  last_name: string;
-  role?: string;
-  class_id?: number;
-  email: string;
-  password: string;
+export interface LoginResponse {
+  message: string;
+  sucess: boolean;
+  token: string;
 }
 
-interface login {
-  email: string;
-  password: string;
+export async function loginUser(email: string, password: string) {
+  return apiFetch<LoginResponse>("/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
 }
-
-export const authService = {
-  register: (data: register) =>
-    request("/register", { method: "POST", body: JSON.stringify(data) }),
-
-  login: (data: login) =>
-    request("/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
-};
