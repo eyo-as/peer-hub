@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/select";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { registerUser } from "@/service/auth";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -62,6 +64,7 @@ export function SignUpForm() {
           type: "success",
           text: data.message || "Registered successfully!",
         });
+        router.push("/auth/signin");
       } else {
         setMessage({
           type: "error",

@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { loginUser } from "@/service/auth";
+import { useRouter } from "next/navigation";
 
 export function SignInForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +33,7 @@ export function SignInForm() {
       if (data.message) {
         localStorage.setItem("token", data.token);
         setMessage({ type: "success", text: data.message });
+        router.push("/");
       }
 
       if (data.error) {
