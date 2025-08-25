@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation";
 import { AskQuestionForm } from "@/components/ask-question-form";
 import {
   Card,
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 export default function AskQuestionPage() {
   return (
     <div className="min-h-screen">
-      <Navigation />
       <main className="container mx-auto max-w-4xl px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2 font-serif">
