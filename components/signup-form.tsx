@@ -1,100 +1,115 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { registerUser } from "@/service/auth";
 
 export function SignUpForm() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
-    agreeToTerms: false,
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [role] = useState("student");
+  const [classId, setClassId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+  const classOptions = ["9", "10", "11", "12"];
 
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      setIsLoading(false)
-      return
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage(null);
+
+    // basic validation
+    if (password !== confirmPassword) {
+      setMessage({ type: "error", text: "Passwords do not match" });
+      setIsLoading(false);
+      return;
     }
 
-    if (!formData.agreeToTerms) {
-      setError("Please agree to the terms and conditions")
-      setIsLoading(false)
-      return
-    }
-
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      // Handle successful sign up
-      console.log("Sign up successful:", formData)
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
+      const data = await registerUser(
+        username,
+        firstName,
+        lastName,
+        role,
+        classId,
+        email,
+        password
+      );
+
+      if (data.success) {
+        setMessage({
+          type: "success",
+          text: data.message || "Registered successfully!",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          text: data.error || "Registration failed",
+        });
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage({ type: "error", text: err.message });
+      } else {
+        setMessage({ type: "error", text: "Unexpected error occurred" });
+      }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
-  const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      role: value,
-    }))
-  }
-
-  const handleTermsChange = (checked: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      agreeToTerms: checked,
-    }))
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+      {message && (
+        <Alert variant={message.type === "success" ? "default" : "destructive"}>
+          <AlertDescription
+            className={
+              message.type === "success" ? "text-green-600" : "text-red-600"
+            }
+          >
+            {message.text}
+          </AlertDescription>
         </Alert>
       )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            disabled={isLoading}
+          />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
           <Input
             id="firstName"
-            name="firstName"
-            type="text"
-            placeholder="John"
-            value={formData.firstName}
-            onChange={handleChange}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
             disabled={isLoading}
           />
@@ -103,11 +118,8 @@ export function SignUpForm() {
           <Label htmlFor="lastName">Last Name</Label>
           <Input
             id="lastName"
-            name="lastName"
-            type="text"
-            placeholder="Doe"
-            value={formData.lastName}
-            onChange={handleChange}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             required
             disabled={isLoading}
           />
@@ -115,30 +127,35 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="john.doe@school.edu"
-          value={formData.email}
-          onChange={handleChange}
-          required
+        <Label htmlFor="classId">Class</Label>
+        <Select
+          value={classId}
+          onValueChange={(val) => setClassId(val)}
           disabled={isLoading}
-        />
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select your class" />
+          </SelectTrigger>
+          <SelectContent>
+            {classOptions.map((id) => (
+              <SelectItem key={id} value={id}>
+                {id}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="role">I am a...</Label>
-        <Select onValueChange={handleRoleChange} disabled={isLoading}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select your role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="student">Student</SelectItem>
-            <SelectItem value="teacher">Teacher</SelectItem>
-          </SelectContent>
-        </Select>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          disabled={isLoading}
+        />
       </div>
 
       <div className="space-y-2">
@@ -146,11 +163,9 @@ export function SignUpForm() {
         <div className="relative">
           <Input
             id="password"
-            name="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Create a strong password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
             disabled={isLoading}
           />
@@ -160,9 +175,12 @@ export function SignUpForm() {
             size="sm"
             className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
             onClick={() => setShowPassword(!showPassword)}
-            disabled={isLoading}
           >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>
@@ -172,11 +190,9 @@ export function SignUpForm() {
         <div className="relative">
           <Input
             id="confirmPassword"
-            name="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
             disabled={isLoading}
           />
@@ -186,25 +202,14 @@ export function SignUpForm() {
             size="sm"
             className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            disabled={isLoading}
           >
-            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showConfirmPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </Button>
         </div>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox id="terms" checked={formData.agreeToTerms} onCheckedChange={handleTermsChange} disabled={isLoading} />
-        <Label htmlFor="terms" className="text-sm text-muted-foreground">
-          I agree to the{" "}
-          <Button variant="link" className="px-0 h-auto text-sm text-accent hover:underline">
-            Terms of Service
-          </Button>{" "}
-          and{" "}
-          <Button variant="link" className="px-0 h-auto text-sm text-accent hover:underline">
-            Privacy Policy
-          </Button>
-        </Label>
       </div>
 
       <Button type="submit" className="w-full" disabled={isLoading}>
@@ -212,5 +217,5 @@ export function SignUpForm() {
         Create Account
       </Button>
     </form>
-  )
+  );
 }

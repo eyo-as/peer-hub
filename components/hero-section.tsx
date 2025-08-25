@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { features } from "@/config/hero-section";
 import { ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -38,7 +39,7 @@ export function HeroSection() {
               size="lg"
               className="text-lg px-10 py-6 bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
             >
-              Get Started
+              <Link href="/auth/signup">Get Started</Link>
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button

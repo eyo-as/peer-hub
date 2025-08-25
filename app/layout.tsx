@@ -5,6 +5,7 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Footer from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navigation />
           {children}
           <Footer />
         </ThemeProvider>

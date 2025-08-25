@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BookOpen } from "lucide-react";
+// import { BookOpen } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,16 +17,11 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <div className="w-full max-w-md">
         {/* Logo and Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <BookOpen className="h-6 w-6" />
-            </div>
-            <span className="text-2xl font-bold text-foreground">Peer-Hub</span>
-          </Link>
+          
           <h1 className="text-2xl font-bold text-foreground mb-2">
             Join the community
           </h1>
