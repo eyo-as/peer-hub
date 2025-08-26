@@ -1,139 +1,151 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, Users, MoreHorizontal, Ban, Shield, Mail } from "lucide-react"
+import { useState, useEffect } from "react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Search, Users, MoreHorizontal, Ban, Shield, Mail } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-// Mock users data
-const mockUsers = [
-  {
-    id: "1",
-    name: "Sarah Martinez",
-    email: "sarah.martinez@school.edu",
-    role: "student",
-    avatar: "/student-avatar.png",
-    reputation: 850,
-    joinDate: "2023-03-15",
-    status: "active",
-    questionsAsked: 23,
-    answersGiven: 67,
-    lastActive: "2 hours ago",
-  },
-  {
-    id: "2",
-    name: "Dr. Johnson",
-    email: "johnson@school.edu",
-    role: "teacher",
-    avatar: "/teacher-avatar.png",
-    reputation: 2450,
-    joinDate: "2023-01-10",
-    status: "active",
-    questionsAsked: 5,
-    answersGiven: 156,
-    lastActive: "1 hour ago",
-  },
-  {
-    id: "3",
-    name: "Mike Roberts",
-    email: "mike.roberts@school.edu",
-    role: "student",
-    avatar: "/student-avatar.png",
-    reputation: 320,
-    joinDate: "2023-05-20",
-    status: "suspended",
-    questionsAsked: 12,
-    answersGiven: 28,
-    lastActive: "1 week ago",
-  },
-  {
-    id: "4",
-    name: "Emma Wilson",
-    email: "emma.wilson@school.edu",
-    role: "student",
-    avatar: "/student-avatar.png",
-    reputation: 1200,
-    joinDate: "2023-02-28",
-    status: "active",
-    questionsAsked: 45,
-    answersGiven: 89,
-    lastActive: "30 minutes ago",
-  },
-]
+} from "@/components/ui/dropdown-menu";
+import { getAllUser, User } from "@/service/auth";
 
 export function UserManagement() {
-  const [users, setUsers] = useState(mockUsers)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [roleFilter, setRoleFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
+  const [users, setUsers] = useState<
+    (User & {
+      status: string;
+      avatar: string;
+      questionsAsked: number;
+      answersGiven: number;
+      lastActive: string;
+    })[]
+  >([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  const filteredUsers = users.filter((user) => {
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const data = await getAllUser();
+        const mapped = data?.map((u) => ({
+          ...u,
+          status: "active",
+          avatar: "/placeholder.svg",
+          questionsAsked: 0,
+          answersGiven: 0,
+          lastActive: "just now",
+        }));
+        setUsers(mapped);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    }
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users?.filter((user) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesRole = roleFilter === "all" || user.role === roleFilter
-    const matchesStatus = statusFilter === "all" || user.status === statusFilter
+      `${user.first_name} ${user.last_name}`
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === "all" || user.role === roleFilter;
+    const matchesStatus =
+      statusFilter === "all" || user.status === statusFilter;
+    return matchesSearch && matchesRole && matchesStatus;
+  });
 
-    return matchesSearch && matchesRole && matchesStatus
-  })
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const currentUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + usersPerPage
+  );
 
-  const handleUserAction = (userId: string, action: string) => {
+  const handleUserAction = (userId: string | number, action: string) => {
     setUsers(
-      users.map((user) => {
-        if (user.id === userId) {
+      users?.map((user) => {
+        if (user.user_id === userId) {
           switch (action) {
             case "suspend":
-              return { ...user, status: "suspended" }
+              return { ...user, status: "suspended" };
             case "activate":
-              return { ...user, status: "active" }
+              return { ...user, status: "active" };
             case "promote":
-              return { ...user, role: user.role === "student" ? "teacher" : "student" }
+              return {
+                ...user,
+                role: user.role === "student" ? "teacher" : "student",
+              };
             default:
-              return user
+              return user;
           }
         }
-        return user
-      }),
-    )
-  }
+        return user;
+      })
+    );
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>
+        return (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+            Active
+          </Badge>
+        );
       case "suspended":
-        return <Badge variant="destructive">Suspended</Badge>
+        return <Badge variant="destructive">Suspended</Badge>;
       case "banned":
-        return <Badge variant="destructive">Banned</Badge>
+        return <Badge variant="destructive">Banned</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{status}</Badge>;
     }
-  }
+  };
 
   const getRoleBadge = (role: string) => {
     switch (role) {
       case "teacher":
-        return <Badge variant="default">Teacher</Badge>
+        return <Badge variant="default">Teacher</Badge>;
       case "student":
-        return <Badge variant="secondary">Student</Badge>
+        return <Badge variant="secondary">Student</Badge>;
       case "admin":
-        return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">Admin</Badge>
+        return (
+          <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">
+            Admin
+          </Badge>
+        );
       default:
-        return <Badge variant="outline">{role}</Badge>
+        return <Badge variant="outline">{role}</Badge>;
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -144,7 +156,9 @@ export function UserManagement() {
             <Users className="h-8 w-8 text-accent" />
             User Management
           </h1>
-          <p className="text-muted-foreground">Manage user accounts and permissions</p>
+          <p className="text-muted-foreground">
+            Manage user accounts and permissions
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline">{filteredUsers.length} users</Badge>
@@ -163,11 +177,20 @@ export function UserManagement() {
               <Input
                 placeholder="Search by name or email..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1); // reset page when searching
+                }}
                 className="pl-10"
               />
             </div>
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <Select
+              value={roleFilter}
+              onValueChange={(v) => {
+                setRoleFilter(v);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger className="w-full md:w-40">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
@@ -178,7 +201,13 @@ export function UserManagement() {
                 <SelectItem value="admin">Admins</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select
+              value={statusFilter}
+              onValueChange={(v) => {
+                setStatusFilter(v);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger className="w-full md:w-40">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
@@ -205,45 +234,47 @@ export function UserManagement() {
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Reputation</TableHead>
                 <TableHead>Activity</TableHead>
                 <TableHead>Last Active</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id}>
+              {currentUsers?.map((user) => (
+                <TableRow key={user.user_id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                        <AvatarImage src={user.avatar} alt={user.username} />
                         <AvatarFallback>
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                          {user.first_name[0]}
+                          {user.last_name[0]}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-foreground">{user.name}</p>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                        <p className="font-medium text-foreground">
+                          {user.first_name} {user.last_name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>{getRoleBadge(user.role)}</TableCell>
                   <TableCell>{getStatusBadge(user.status)}</TableCell>
                   <TableCell>
-                    <span className="font-medium">{user.reputation}</span>
-                  </TableCell>
-                  <TableCell>
                     <div className="text-sm">
                       <p>{user.questionsAsked} questions</p>
-                      <p className="text-muted-foreground">{user.answersGiven} answers</p>
+                      <p className="text-muted-foreground">
+                        {user.answersGiven} answers
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-muted-foreground">{user.lastActive}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {user.lastActive}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -257,21 +288,33 @@ export function UserManagement() {
                           <Mail className="mr-2 h-4 w-4" />
                           Send Message
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleUserAction(user.id, "promote")}>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleUserAction(user.user_id, "promote")
+                          }
+                        >
                           <Shield className="mr-2 h-4 w-4" />
-                          {user.role === "student" ? "Promote to Teacher" : "Demote to Student"}
+                          {user.role === "student"
+                            ? "Promote to Teacher"
+                            : "Demote to Student"}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {user.status === "active" ? (
                           <DropdownMenuItem
-                            onClick={() => handleUserAction(user.id, "suspend")}
+                            onClick={() =>
+                              handleUserAction(user.user_id, "suspend")
+                            }
                             className="text-red-600"
                           >
                             <Ban className="mr-2 h-4 w-4" />
                             Suspend User
                           </DropdownMenuItem>
                         ) : (
-                          <DropdownMenuItem onClick={() => handleUserAction(user.id, "activate")}>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleUserAction(user.user_id, "activate")
+                            }
+                          >
                             <Shield className="mr-2 h-4 w-4" />
                             Activate User
                           </DropdownMenuItem>
@@ -283,8 +326,33 @@ export function UserManagement() {
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4">
+            <p className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

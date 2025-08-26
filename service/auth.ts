@@ -13,6 +13,24 @@ export interface LoginResponse {
   token: string;
 }
 
+export interface User {
+  class_id: string | number;
+  created_at: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  role: string;
+  user_id: string | number;
+  username: string;
+}
+
+export interface UserListResponse {
+  message: string;
+  success: boolean;
+  data: User[];
+}
+
 export async function registerUser(
   username: string,
   first_name: string,
@@ -61,3 +79,23 @@ export async function loginUser(
     throw new Error("Unexpected error occurred");
   }
 }
+
+export async function getAllUser(): Promise<User[]> {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await apiFetch("/users", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data: UserListResponse = await res.json();
+
+    return data.data;
+  } catch (err) {
+    if (err instanceof Error) throw new Error(err.message);
+    throw new Error("Unexpected error occurred");
+  }
+}
+
+
