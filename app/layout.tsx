@@ -6,6 +6,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Footer from "@/components/footer";
 import { Navigation } from "@/components/navigation";
+import UserContextProvider from "@/context/ContextProvider";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -45,7 +46,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navigation />
-          {children}
+          <UserContextProvider>{children}</UserContextProvider>
           <Footer />
         </ThemeProvider>
       </body>

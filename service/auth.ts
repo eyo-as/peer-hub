@@ -25,6 +25,12 @@ export interface User {
   username: string;
 }
 
+export interface SingleUserResponse {
+  message: string;
+  success: boolean;
+  data: User;
+}
+
 export interface UserListResponse {
   message: string;
   success: boolean;
@@ -98,4 +104,22 @@ export async function getAllUser(): Promise<User[]> {
   }
 }
 
+export async function getSingleUser(
+  user_id: string,
+  token: string
+): Promise<User> {
+  try {
+    const res = await apiFetch(`/user/${user_id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    const data: SingleUserResponse = await res.json();
+    return data.data;
+  } catch (err) {
+    if (err instanceof Error) throw new Error(err.message);
+    throw new Error("Unexpected error occurred");
+  }
+}
