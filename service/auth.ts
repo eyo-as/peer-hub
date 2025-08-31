@@ -105,7 +105,7 @@ export async function getAllUser(): Promise<User[]> {
 }
 
 export async function getSingleUser(
-  user_id: string,
+  user_id: string | number,
   token: string
 ): Promise<User> {
   try {
