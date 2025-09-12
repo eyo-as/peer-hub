@@ -1,5 +1,6 @@
 "use client";
 
+import { jwtDecode } from "jwt-decode";
 import React, {
   createContext,
   useContext,
@@ -11,6 +12,8 @@ import React, {
 type UserContextType = {
   token: string | null;
   setToken: (token: string | null) => void;
+  userId: string | number | null;
+  setUserId: (id: string | number | null) => void;
 };
 
 type UserContextTypeProps = {
@@ -21,18 +24,20 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserContextProvider = ({ children }: UserContextTypeProps) => {
   const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | number | null>(null);
 
   useEffect(() => {
-    // Set token from localStorage on mount
     const storedToken =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (storedToken) {
       setToken(storedToken);
+      const decoded = jwtDecode<{ user_id: string | number }>(storedToken);
+      setUserId(decoded.user_id);
     }
   }, []);
 
   return (
-    <UserContext.Provider value={{ token, setToken }}>
+    <UserContext.Provider value={{ token, setToken, userId, setUserId }}>
       {children}
     </UserContext.Provider>
   );
