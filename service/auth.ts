@@ -123,3 +123,25 @@ export async function getSingleUser(
     throw new Error("Unexpected error occurred");
   }
 }
+
+export async function updateUser(
+  userId: string | number,
+  userData: Partial<User>,
+  token: string
+) {
+  try {
+    const res = await apiFetch(`/user/${userId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data: SingleUserResponse = await res.json();
+    return data;
+  } catch (err) {
+    if (err instanceof Error) throw new Error(err.message);
+    throw new Error("Unexpected error occurred");
+  }
+}
